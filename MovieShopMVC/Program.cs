@@ -1,3 +1,4 @@
+
 using ApplicationCore.Contracts.Repositories;
 using ApplicationCore.Contracts.Services;
 using Infrastructure.Data;
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+
 
 //Inject the connection string to our DbContext by reading from appsettings.json
 builder.Services.AddDbContext<MovieShopDbContext>(options =>
