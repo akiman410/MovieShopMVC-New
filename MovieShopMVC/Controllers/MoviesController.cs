@@ -15,7 +15,7 @@ namespace MovieShopMVC.Controllers
         {
             // Call Movie Service with Details and pass the movie details data to Views
             // Data
-            // Remote Database 
+            // Remote Database    
 
             // CPU bound operation => PI => Loan callcuator, image pro
             // I/O bound operation => database calls, file, images, videos
