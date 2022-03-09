@@ -13,8 +13,7 @@ namespace MovieShopMVC.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            // Movie Service with Details
-            // pass the movie details data to view
+            // Call Movie Service with Details and pass the movie details data to Views
             // Data
             // Remote Database 
 

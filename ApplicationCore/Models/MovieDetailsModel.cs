@@ -24,9 +24,9 @@ namespace ApplicationCore.Models
         public int? RunTime { get; set; }
         public decimal? Price { get; set; }
 
-        public List<GenreModel> Genres { get; set; }
-        public List<TrailerModel> Trailers { get; set; }
-        public List<CastModel> Casts { get; set; }
+        public List<GenreModel>? Genres { get; set; }
+        public List<TrailerModel>? Trailers { get; set; }
+        public List<CastModel>? Casts { get; set; }
 
 
     }

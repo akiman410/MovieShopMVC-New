@@ -1,6 +1,6 @@
 ﻿@model ApplicationCore.Models.MovieDetailsModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Movie Details Page";
 }
 
 
@@ -32,13 +32,16 @@
           <li class="list-group-item"><p>Budget<p><span class="badge rounded-pill bg-secondary">@Model.Budget</span></p></li>  
         </ul>
         <div>
-            <h3>Trailers</h3>
-            
+            <h3>Trailers</h3>      
+
         </div>
     </div>
     <div class="col-6">
         <h5>CAST</h5>
-        @Model.Casts 
+      <ul>
+             @foreach (var x in Model.Casts)
+                {<li>@x.Name </li>}
+        </ul>
     </div>
     <div class="col-3">  
     </div>
