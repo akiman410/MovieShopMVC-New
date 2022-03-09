@@ -11,6 +11,7 @@ namespace Infrastructure.Repositories
     public class EfRepository<T> : IRepository<T> where T : class
     {
         protected readonly MovieShopDbContext _dbContext;
+        
 
         public EfRepository(MovieShopDbContext dbContext)
         {

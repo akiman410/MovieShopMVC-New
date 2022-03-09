@@ -12,7 +12,7 @@ namespace Infrastructure.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-
+    
         public MovieService(IMovieRepository movieRepository)
         {
             _movieRepository = movieRepository;
@@ -34,7 +34,7 @@ namespace Infrastructure.Services
 
             return movieCards;
         }
-
+        
         public async Task<MovieDetailsModel> GetMovieDetails(int id)
         {
             var movie = await _movieRepository.GetById(id);
