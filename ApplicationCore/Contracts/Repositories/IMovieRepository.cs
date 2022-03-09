@@ -13,8 +13,9 @@ namespace ApplicationCore.Contracts.Repositories
         Task<IEnumerable<Movie>> GetTop30RevenueMovies();
 
         // totalcount, pagesize, pageNumber, TotalPages
-        // PagedModel => 
-        // Tuple 
+        // option for return a row
+        // Return PagedModel => PagedResultSet Model
+        // Return Tuple (int totalCount,int totalCount, totalPage ,string) returns three object
         // Task<(IEnumerable<Movie>, int totalCount, int totalPages)> GetMoviesByGenres(int genreId, int pageSize = 30, int pageNumber = 1);
         Task<PagedResultSet<Movie>> GetMoviesByGenres(int genreId, int pageSize = 30, int pageNumber = 1);
     }
