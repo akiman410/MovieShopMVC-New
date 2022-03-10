@@ -4,45 +4,60 @@
 }
 
 
-  <div class="row">
-            <div class="card" style="width: 10rem;">
+  <div class="row" style="background-image: url('@Model.PosterUrl'); background-position-y">      
+          <div class="card" style="width: 10rem;">
             <img src="@Model.PosterUrl" class="card-img-top" alt="@Model.Title"></div>
 
          <div class="col-6" >
-           <ul class="list-group">
-              <li class="list-group-item"><h3 class= "fs-6">@Model.Title</h3></li>
-             <li class="list-group-item"><span class="badge rounded-pill bg-secondary">@Model.</span></li>
-             <li class="list-group-item">@Model.Rating</li>
+           <ul class="list-unstyled">
+              <li class="list-group-item"><h1 class= "fs-6">@Model.Title</h1></li>
+              <li class="list-group-item align-content-center">
+                  @foreach (var Model in Model.Genres)
+                 {    
+                    <span class="badge rounded-pill bg-secondary">@Model.Name</span>
+                 }
+             </li>           
+             <li class="list-group-item">
+                     <span class="badge rounded-pill bg-secondary">@Model.Id</span>
+             </li>
              <li class="list-group-item">@Model.Overview</li>  
             </ul>
          </div>
-           <div class="d-grid gap-2 col-3 mx-auto" width="50">
+           <div class="gap-2 col-3 mx-auto" width="20" height="10">
                  <button type="button" class="btn btn-outline-secondary">Review</button>              
                  <button class="btn btn-primary" type="button">Buy $@Model.Price</button>
         </div>
+   </div>
 
-  </div>
   <div class="row">
     <div class="col-3 col-xl-3 col-sm-2 col-lg-3">
       <h4>MOVIE FACTS</h4>
-       <ul class="list-group">
-          <li class="list-group-item"><p>Release Date</p><span class="badge rounded-pill bg-secondary">@Model.ReleaseDate</span></li>
-          <li class="list-group-item"><p>Run Time<p><span class="badge rounded-pill bg-secondary">@Model.RunTime</span></p></li>
-          <li class="list-group-item"><p>Box Office<p><span class="badge rounded-pill bg-secondary">@Model.Revenue</span></p></li>
-          <li class="list-group-item"><p>Budget<p><span class="badge rounded-pill bg-secondary">@Model.Budget</span></p></li>  
+       <ul class="list-unstyled">
+          <li class="list-group-item"><a>Release Date&nbsp</a><span class="badge rounded-pill bg-secondary">@Model.ReleaseDate</span></li>
+          <li class="list-group-item"><a>Run Time&nbsp</a><span class="badge rounded-pill bg-secondary">@Model.RunTime</span></li>
+          <li class="list-group-item"><a>Box Office&nbsp</a><span class="badge rounded-pill bg-secondary">@Model.Revenue</span></li>
+          <li class="list-group-item"><a>Budget&nbsp</a><span class="badge rounded-pill bg-secondary">@Model.Budget</span></li>  
         </ul>
         <div>
-            <h3>Trailers</h3>      
-
+        <h3>Trailers</h3>    
+        <ul class="list-unstyled">
+            @foreach (var Model in Model.Trailers)
+                {    
+                    <li><a href="@Model.TrailerUrl">@Model.Name &nbsp</a></li>
+                }
+        </ul> 
         </div>
     </div>
     <div class="col-6">
         <h5>CAST</h5>
-      <ul>
-             @foreach (var x in Model.Casts)
-                {<li>@x.Name </li>}
+      <ul class="list-unstyled">
+             @foreach (var Model in Model.Casts)
+                {    <li><img src="@Model.ProfilePath" alt="@Model.Name" width="40" height="40">
+                    <a href="@Model.ProfilePath">@Model.Name &nbsp</a> <a>@Model.Character</a></li>
+                }
         </ul>
     </div>
     <div class="col-3">  
+        
     </div>
   </div>
