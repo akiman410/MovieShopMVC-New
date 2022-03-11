@@ -10,7 +10,7 @@ namespace MovieShopMVC.Controllers
         {
             _movieService = movieService;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             // Call Movie Service with Details and pass the movie details data to Views
