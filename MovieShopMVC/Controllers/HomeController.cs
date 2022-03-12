@@ -27,11 +27,6 @@ namespace MovieShopMVC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult TopMovies()
-        {
-            return View();
-        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

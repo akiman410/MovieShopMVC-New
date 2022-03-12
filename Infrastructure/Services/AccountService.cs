@@ -27,7 +27,7 @@ namespace Infrastructure.Services
             // Verify if the User has an account already
             //Go to the UserRepository db to check whether record of user exists by email.
             var dbUser = await _userRepository.GetUserByEmail(model.Email);
-            if (dbUser == null)
+            if (dbUser != null)
             {
                 throw new Exception("Email Already Registered, try to login");
             }
@@ -59,7 +59,7 @@ namespace Infrastructure.Services
             var user = await _userRepository.GetUserByEmail(email);
             if (user == null)
             {
-                throw new Exception("Username of Password is incorrect");
+                throw new Exception("Username or Password is incorrect");
             }
             var hashedPassword = GetHashedPassword(password, user.Salt);
             if (hashedPassword == user.HashedPassword)
@@ -69,7 +69,8 @@ namespace Infrastructure.Services
                     Id = user.Id, 
                     FirstName = user.FirstName, 
                     LastName = user.LastName, 
-                    DateOfBirth = user.DateOfBirth.GetValueOrDefault() };
+                    DateOfBirth = user.DateOfBirth.GetValueOrDefault() 
+                };
             }
             return null;
         }
@@ -93,7 +94,6 @@ namespace Infrastructure.Services
             256 / 8));
           return hashed;
         }
-
 
     }
 }

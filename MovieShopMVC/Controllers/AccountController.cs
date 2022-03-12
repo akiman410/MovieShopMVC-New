@@ -17,24 +17,29 @@ namespace MovieShopMVC.Controllers
 
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Register()
         {
             return View();
         }
-        [HttpPost]
-        [HttpPost]
+
+        [HttpPost] 
         public async Task<IActionResult> Register(RegisterModel model)
         {
             // save the password and account info with salt
-            var user = await _accountService.CreateUser(model);
-            return RedirectToAction("Login");
-
+            if(ModelState.IsValid)
+            {
+                var user = await _accountService.CreateUser(model);
+                return RedirectToAction("Login");
+            }
+            return View(model);
         }
         [HttpGet]
+
         public IActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {

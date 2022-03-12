@@ -32,5 +32,11 @@ namespace MovieShopMVC.Controllers
             var pagedMovies = await _movieService.GetMoviesByGenrePagination(id, pageSize, pageNumber);
             return View("PagedMovies", pagedMovies);
         }
+
+        [HttpGet]
+        public IActionResult TopMovies()
+        {
+            return View();
+        }
     }
 }

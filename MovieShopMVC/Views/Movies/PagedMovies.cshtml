@@ -8,16 +8,14 @@
                 @foreach (var movie in Model.Data)
                 {
                      <div class= col-xl-2 col-sm-4 col-lg-3 col-6 col-md-4>
-                    <partial name="_MovieCard" model="movie"/>
+                        <partial name="_MovieCard" model="movie"/>
                     </div>
                 }
-
         </div>
     </div>
 </div>
 <nav aria-label="Page navigation example">
     <ul class="pagination">
-
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item">
@@ -25,9 +23,6 @@
                     @i
                 </a>
             </li>
-
         }
-
-
     </ul>
 </nav>

@@ -43,7 +43,8 @@ namespace Infrastructure.Repositories
 
         public async Task<PagedResultSet<Movie>> GetMoviesByGenres(int genreId, int pageSize = 30, int pageNumber = 1)
         {
-            // get total movies count for that genre
+            // get total movies count for that genre            
+            
             var totalMoviesCountByGenre = await _dbContext.MovieGenres.Where(m => m.GenreId == genreId).CountAsync();
 
             // get the actual movies from MovieGenre and Movie Table
