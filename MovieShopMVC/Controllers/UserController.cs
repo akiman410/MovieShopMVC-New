@@ -3,6 +3,7 @@ using ApplicationCore.Contracts.Services;
 using System.Security.Claims;
 using MovieShopMVC.Services;
 using Microsoft.AspNetCore.Authorization;
+using ApplicationCore.Models;
 
 namespace MovieShopMVC.Controllers
 {
@@ -17,8 +18,7 @@ namespace MovieShopMVC.Controllers
         }
 
         [HttpGet]
-        
-        public async Task<IActionResult> Purchases()
+        public async Task<IActionResult> Purchases(PurchaseRequestModel purchaseRequestModel)
         {
             // Method needs to verify whether  user is logged in
             {

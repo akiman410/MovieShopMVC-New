@@ -14,5 +14,10 @@ namespace Infrastructure.Repositories
         public PurchaseRepository(MovieShopDbContext dbContext) : base(dbContext)
         {
         }
+
+        Task IPurchaseRepository.Add(Purchase purchase)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

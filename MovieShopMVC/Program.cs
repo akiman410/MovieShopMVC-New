@@ -21,6 +21,7 @@ builder.Services.AddScoped<ICastService, CastService>();
 builder.Services.AddScoped<ICastRepository, CastRepository>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddHttpContextAccessor();
 
 
