@@ -1,0 +1,235 @@
+using Microsoft.AspNetCore.Mvc;
+using ApplicationCore.Contracts.Services;
+using System.Security.Claims;
+using MovieShopMVC.Services;
+using Microsoft.AspNetCore.Authorization;
+using ApplicationCore.Models;
+
+namespace MovieShopMVC.Controllers
+{
+    [Authorize]
+    public class UserController : Controller
+    {
+        private readonly ICurrentUser _currentUser;
+        private readonly IUserService _userService;
+
+        public UserController(ICurrentUser currentUser, IUserService userService)
+        {
+            _currentUser = currentUser;
+            _userService =  userService;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Purchases(int id)
+        {
+            // Method needs to verify whether  user is logged in
+            var userId = _currentUser.UserId;
+            //get the user id to verify
+            //send the user id to the database to get al the movies the user purchased.
+            // user cookie based authentication
+            var movieDetails = await _userService.GetAllPurchasesForUser(id);
+            return RedirectToAction("Purchases");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Favorites(FavoriteRequestModel model)
+        {
+            var userId = _currentUser.UserId;
+            var movieDetails = await _userService.AddFavorite(model, userId);
+            return RedirectToAction("Favorites");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Reviews(ReviewRequestModel model)
+        {
+            var userId = _currentUser.UserId;
+                     await _userService.AddMovieReview(model, userId);
+            return RedirectToAction("Reviews");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BuyMovie()
+        {
+            var userId = _currentUser.UserId;
+
+            var purchaseNew = await _userService.GetAllPurchasesForUser(userId);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FavoriteMovie()
+        {
+            var userId = _currentUser.UserId;
+
+            var favorite = await _userService.GetAllFavoritesForUser(userId);
+            return View(favorite);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReviewMovie()
+        {
+            var userId = _currentUser.UserId;
+            var reviewed = await _userService.GetAllReviewsByUser(userId);
+            return View(reviewed);
+        }
+    }
+}
+*****************************************************************************************************
+
+using ApplicationCore.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ApplicationCore.Contracts.Services
+{
+    public interface IUserService
+    {
+        // Implementation for Purchases
+        Task<bool> PurchaseMovie(PurchaseRequestModel purchaseRequest, int userId);
+
+        // verify if movie is purchased
+        Task<bool> IsMoviePurchased(PurchaseRequestModel purchaseRequest, int userId);
+
+        // Get Purchase  movie using userId
+        Task<List<PurchasesForUserModel>> GetAllPurchasesForUser(int id);
+        
+        //Get all the movies purchased
+        Task<PurchasesDetailsModel> GetPurchasesDetails(int userId, int movieId);
+
+        // Implementation for Favorites
+        Task<bool> AddFavorite(FavoriteRequestModel favoriteRequest, int userId);
+        Task<bool> RemoveFavorite(FavoriteRequestModel favoriteRequest);
+        Task<bool> FavoriteExists(int id, int movieId);
+        Task<List <GetAllFavoritesModel>> GetAllFavoritesForUser(int id);
+
+        // Implementation for Reviews
+        Task<bool> AddMovieReview(ReviewRequestModel reviewRequest, int userId);
+        Task<bool> UpdateMovieReview(ReviewRequestModel reviewRequest);
+        Task<bool> DeleteMovieReview(int userId, int movieId);
+        Task<IEnumerable <GetAllReviewsModel>> GetAllReviewsByUser(int id);
+    }
+}
+***************************************************************************************************
+
+using ApplicationCore.Contracts.Repositories;
+using ApplicationCore.Enities;
+using Infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.Repositories
+{
+    public class UserRepository : EfRepository<User>, IUserRepository
+    {
+        public UserRepository(MovieShopDbContext dbContext) : base(dbContext)
+        {
+        }
+
+        //Purchases
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return user;
+        }
+
+        async Task<List<Purchase>> GetAllPurchasesForUser(int id)
+        {
+            var moviePurchased = await _dbContext.Purchases.Include(m => m.Movie).Where(u => u.UserId == id).ToListAsync();
+            return moviePurchased;
+        }
+
+        public async Task<Purchase> GetPurchasedListForUser(Purchase model, int userId)
+        {
+            var movie = await _dbContext.Purchases.Where(m => m.MovieId == model.MovieId).Where(u => u.UserId == userId).FirstOrDefaultAsync();
+            return movie;
+        }
+
+        public async Task<Purchase> Add(Purchase purchase)
+        {
+            _dbContext.Purchases.Add(purchase);
+            _ = await _dbContext.SaveChangesAsync();
+            return purchase;
+        }
+
+
+        // Favorites 
+        public async Task<bool> AddFavorite(Favorite favorite)
+        {
+            _dbContext.Favorites.Add(favorite);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> FavoritesForUser(int id, int movieId)
+        {
+            var favorite = await _dbContext.Favorites
+                 .FirstOrDefaultAsync(u => u.MovieId == u.MovieId && u.UserId == id);
+            if (favorite == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<IEnumerable<Favorite>> GetAllFavoritesForUser(int id)
+        {
+            var movieFavorited = await _dbContext.Favorites.Include(m => m.Movie).Where(u => u.UserId == id).ToListAsync();
+            return movieFavorited;
+        }
+
+        public async Task DeleteFavorite(int id, int movieId)
+        {
+            var deleteFavorite = await _dbContext.Favorites.Include(u => u.MovieId == movieId).FirstOrDefaultAsync();
+            if (deleteFavorite != null)
+            {
+                _dbContext.Favorites.Remove(deleteFavorite);
+            }
+        }
+
+        //Review
+        public async Task<List<Review>> GetReviewForUser(int id, Review movieId)
+        {
+            var reviews = await _dbContext.Reviews.Include(m => m.Movie).Where(u => u.UserId == id).Include(u => u.User).ToListAsync();
+            return reviews;
+        }
+
+        public async Task<IEnumerable<Review>> GetReviewForUser(int id)
+        {
+            var userReviews = await _dbContext.Reviews.FirstOrDefaultAsync(u => u.UserId == id);
+            return (IEnumerable<Review>)userReviews;
+        }
+
+        public async Task DeleteReview(int userId, int movieId)
+        {
+            var deleteReview = await _dbContext.Reviews.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+            if (deleteReview != null)
+            {
+                _dbContext.Reviews.Remove(deleteReview);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddReview(Review review)
+        {
+            _dbContext.Reviews.Add(review);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateReview(Review review)
+        {
+            _dbContext.Add(review);
+            await _dbContext.SaveChangesAsync();
+        }
+    }
+}
+
+***********************************************************************************
