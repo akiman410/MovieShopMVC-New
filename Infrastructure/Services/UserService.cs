@@ -55,7 +55,6 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-
         //Favorites
 
         public Task<bool> AddFavorite(FavoriteRequestModel favoriteRequest)
